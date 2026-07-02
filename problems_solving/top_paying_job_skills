@@ -1,0 +1,27 @@
+WITH skill_demand AS (
+    SELECT
+        sd.skills,
+        AVG(jpf.salary_year_avg) AS average_salary,
+        count(jpf.job_id) AS job_offers_count
+    FROM
+        skills_job_dim AS sjd
+    LEFT JOIN skills_dim AS sd ON sjd.skill_id = sd.skill_id
+    LEFT JOIN job_postings_fact AS jpf ON sjd.job_id = jpf.job_id /*
+    On big datasets left joins and then filtering with a WHERE clause
+    is faster than inner joins.
+    */
+    WHERE
+        jpf.salary_year_avg IS NOT NULL
+        AND jpf.job_title LIKE '%Data Analyst%'
+    GROUP BY sd.skills
+)
+SELECT
+    skills,
+    average_salary,
+    job_offers_count
+FROM
+    skill_demand
+WHERE
+    job_offers_count  > (SELECT AVG(job_offers_count) FROM skill_demand)
+    AND average_salary > (SELECT AVG(average_salary) FROM skill_demand)
+ORDER BY job_offers_count DESC, average_salary DESC;
