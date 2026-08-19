@@ -36,6 +36,7 @@ WHERE
     AND average_salary > (SELECT AVG(average_salary) FROM skill_demand)
 ORDER BY job_offers_count DESC, average_salary DESC;
 ```
+![Opis wykresów w Power BI](screens/high_demand_above_average_salaries.png)
 ## 2. Market Gap Analysis (Identifying Undervalued Opportunities)
 *Advanced analysis that uncovers high-demand skills currently associated with lower-than-average salaries.*
 
@@ -74,3 +75,5 @@ WHERE
     AND skill_count > 50
 ORDER BY 
     avg_skill_salary DESC;
+```
+![Opis wykresów w Power BI](screens/high_demand_lower_than_average_salaries.png)
